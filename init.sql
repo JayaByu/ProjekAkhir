@@ -57,11 +57,6 @@ CREATE TABLE Penerima_Bansos (
         IdNama IN (
             'PB[0-9][0-9][0-9][0-9]'
         )
-    ),
-    CONSTRAINT CekEmail CHECK (
-        Email IN (
-            '^[A-Za-z0-9._%-]+@[A-Za-z0-9.-]+[.][A-Za-z]+$'
-        )
     )
 );
 --- 4
