@@ -1,3 +1,4 @@
+USE test;
 --- 1
 --- Pempus
 ---
@@ -95,7 +96,7 @@ CREATE TABLE Bank (
     )
 )
 --- 6
---- Jenis Kurir
+--- Kurir
 ---
 CREATE TABLE Kurir (
     IdKurir CHAR(6) NOT NULL,
@@ -116,11 +117,27 @@ CREATE TABLE Kurir (
 CREATE TABLE JenisBansos (
     IdBansos CHAR(6) NOT NULL,
     JenisBansos VARCHAR(MAX),
+    JenisBarang VARCHAR(MAX),
     JumlahBansos INT,
     PRIMARY KEY (IdBansos),
+    FOREIGN KEY (IdBansos) REFERENCES JenisBarang(IdBarang) ON UPDATE CASCADE ON DELETE CASCADE,
     CONSTRAINT Cekid CHECK (
         IdBansos IN (
             'BN[0-9][0-9][0-9][0-9]'
+        )
+    )
+)
+--- 8
+--- Jenis Barang
+---
+CREATE TABLE JenisBarang (
+    IdBarang CHAR(6) NOT NULL,
+    JenisBarang VARCHAR(MAX),
+    Quantity VARCHAR(MAX),
+    PRIMARY KEY(IdBarang),
+    CONSTRAINT Cekid CHECK (
+        IdBarang IN (
+            'JB[0-9][0-9][0-9][0-9]'
         )
     )
 )
