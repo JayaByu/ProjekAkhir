@@ -110,3 +110,17 @@ CREATE TABLE Kurir (
         )
     )
 )
+--- 7
+--- Jenis Bansos
+---
+CREATE TABLE JenisBansos (
+    IdBansos CHAR(6) NOT NULL,
+    JenisBansos VARCHAR(MAX),
+    JumlahBansos INT,
+    PRIMARY KEY (IdBansos),
+    CONSTRAINT Cekid CHECK (
+        IdBansos IN (
+            'BN[0-9][0-9][0-9][0-9]'
+        )
+    )
+)
