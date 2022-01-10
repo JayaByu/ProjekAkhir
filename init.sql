@@ -1,138 +1,163 @@
+CREATE DATABASE test;
 USE test;
---- 1
---- Pempus
----
-CREATE TABLE Pemerintah_Pusat (
-    Pempusid CHAR(6) NOT NULL,
-    Nama VARCHAR(MAX),
-    JenisKelamin CHAR(255),
-    Alamat VARCHAR(MAX),
-    Phone VARCHAR(MAX),
-    PRIMARY KEY (Pempusid),
-    CONSTRAINT CekGen CHECK (
-        JenisKelamin IN (
-            'Laki','Perempuan'
-        )
-    ),
-    CONSTRAINT Cekid CHECK (
-        Pempusid IN (
+DROP DATABASE testt;
+
+CREATE TABLE Pempu(
+    IdPusat CHAR(6) NOT NULL,
+    NamaPempus VARCHAR(255) NOT NULL,
+    Gender CHAR(10),
+    Alamat VARCHAR(255),
+    Phone VARCHAR(12),
+    PRIMARY KEY (IdPusat),
+    CONSTRAINT CekIdPusat CHECK (
+        IdPusat IN (
             'PU[0-9][0-9][0-9][0-9]'
         )
-    )
-);
---- 2
---- Pemda
----
-CREATE TABLE Pemerintah_Daerah (
-    Pemdaid CHAR(6) NOT NULL,
-    Nama VARCHAR(MAX),
-    JenisKelamin CHAR(255),
-    Daerah VARCHAR(MAX),
-    Alamat VARCHAR(MAX),
-    Phone VARCHAR(MAX),
-    PRIMARY KEY (Pemdaid),
-    CONSTRAINT CekGen CHECK (
-        JenisKelamin IN (
-            'Laki','Perempuan'
-        )
     ),
-    CONSTRAINT Cekid CHECK (
-        Pemdaid IN (
-            'PD[0-9][0-9][0-9][0-9]'
+    CONSTRAINT CekGenPusat CHECK (
+        Gender IN (
+            'Laki','Perempuan'
         )
     )
 );
 
---- 3
---- Penerima
----
-CREATE TABLE Penerima_Bansos (
-    IdNama CHAR(6) NOT NULL,
-    Nama   VARCHAR(MAX),
-    Email  VARCHAR(MAX),
-    Usia   CHAR(255),
-    Daerah VARCHAR(MAX) NOT NULL,
-    PRIMARY KEY(IdNama,Daerah),
-    CONSTRAINT Cekid CHECK (
-        IdNama IN (
-            'PB[0-9][0-9][0-9][0-9]'
+CREATE TABLE Pemda(
+    IdPemda CHAR(6) NOT NULL,
+    NamaPemda VARCHAR(255) NOT NULL,
+    Gender CHAR(10),
+    Alamat VARCHAR(255),
+    Phone VARCHAR(12),
+    PRIMARY KEY (IdPemda),
+    CONSTRAINT CekIdDaerah CHECK (
+        IdPemda IN (
+            'PD[0-9][0-9][0-9][0-9]'
+        )
+    ),
+    CONSTRAINT CekGenDaerah CHECK (
+        Gender IN (
+            'Laki','Perempuan'
         )
     )
 );
---- 4
---- Data Ekspedisi 
----
-CREATE TABLE Ekspedisi (
+
+CREATE TABLE Masyarakat(
+    IdMasya CHAR(6) NOT NULL,
+    Nama VARCHAR(255),
+    Gender CHAR(10),
+    Alamat VARCHAR(255),
+    Phone VARCHAR(12),
+    PRIMARY KEY (IdMasya),
+    CONSTRAINT CekIdMasya CHECK (
+        IdMasya IN(
+            'MS[0-9][0-9][0-9][0-9]'
+        )
+    ),
+        CONSTRAINT CekGenMasya CHECK (
+        Gender IN (
+            'Laki','Perempuan'
+        )
+    )
+);
+
+CREATE TABLE DBKecamatan(
+    IdKecamatan CHAR(6) NOT NULL,
+    IdMasyarakat CHAR(6) NOT NULL,
+    Kecamatan VARCHAR(225) NOT NULL,
+    PRIMARY KEY (IdKecamatan),
+    FOREIGN KEY (IdMasyarakat)
+        REFERENCES Masyarakat(IdMasya) ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+
+CREATE TABLE TipeBansos(
+    IdBansos CHAR(6) NOT NULL,
+    JenisBansos VARCHAR(255) NOT NULL,
+    JumlahBansos INT,
+    PRIMARY KEY(IdBansos),
+    CONSTRAINT CekIdBansos CHECK(
+        IdBansos IN(
+            'TB[0-9][0-9][0-9][0-9]'
+        )
+    ),
+    CONSTRAINT CekJenis CHECK(
+        JenisBansos IN(
+            'NonTunai','Tunai'
+        )
+    )
+);
+
+CREATE TABLE Kurir(
     IdKurir CHAR(6) NOT NULL,
-    JenisPaket VARCHAR(MAX) NOT NULL,
-    Harga INT NOT NULL,
-    IdDestinasi CHAR(6) NOT NULL,
+    Nama VARCHAR(255),
+    Alamat VARCHAR(255),
+    Gender VARCHAR(255),
+    Usia VARCHAR(100),
     PRIMARY KEY (IdKurir),
-    FOREIGN KEY (IdDestinasi) REFERENCES Penerima_Bansos(Daerah) ON DELETE CASCADE ON UPDATE CASCADE,
-    CONSTRAINT Cekid CHECK (
-        IdKurir IN (
-            'EK[0-9][0-9][0-9][0-9]'
-        )
-    )
-)
---- 5
---- Bank
---- 
-CREATE TABLE Bank (
-    IdBank CHAR(6) NOT NULL,
-    NamaBank VARCHAR(MAX),
-    PRIMARY KEY (IdBank),
-    FOREIGN KEY (IdBank) REFERENCES Pemerintah_Pusat(Pempusid) ON DELETE CASCADE ON UPDATE CASCADE,
-    FOREIGN KEY (IdBank) REFERENCES Pemerintah_Daerah(Pemdaid) ON DELETE CASCADE ON UPDATE CASCADE,
-    CONSTRAINT Cekid CHECK (
-        IdBank IN (
-            'BN[0-9][0-9][0-9][0-9]'
-        )
-    )
-)
---- 6
---- Kurir
----
-CREATE TABLE Kurir (
-    IdKurir CHAR(6) NOT NULL,
-    Nama CHAR(255),
-    Alamat VARCHAR(MAX),
-    JenisKelamin VARCHAR(MAX),
-    Usia VARCHAR(MAX),
-    PRIMARY KEY (Nama),
-    CONSTRAINT Cekid CHECK (
-        IdKurir IN (
+    CONSTRAINT CekIdKurir CHECK (
+        IdKurir IN(
             'KU[0-9][0-9][0-9][0-9]'
         )
+    ),
+    CONSTRAINT CekGenKurir CHECK (
+        Gender IN (
+            'Laki','Perempuan'
+        )
     )
-)
---- 7
---- Jenis Bansos
----
-CREATE TABLE JenisBansos (
+);
+
+CREATE TABLE Bank(
+    IdBank CHAR(6) NOT NULL,
+    IdPempu CHAR(6) NOT NULL,
+    IdPemda CHAR(6) NOT NULL,
+    IdPenerima CHAR(6) NOT NULL,
     IdBansos CHAR(6) NOT NULL,
-    JenisBansos VARCHAR(MAX),
-    JenisBarang VARCHAR(MAX),
-    JumlahBansos INT,
-    PRIMARY KEY (IdBansos),
-    FOREIGN KEY (IdBansos) REFERENCES JenisBarang(IdBarang) ON UPDATE CASCADE ON DELETE CASCADE,
-    CONSTRAINT Cekid CHECK (
-        IdBansos IN (
-            'BN[0-9][0-9][0-9][0-9]'
+    NamaBank VARCHAR(255),
+    Transaksi DATE,
+    PRIMARY KEY (IdBank),
+    FOREIGN KEY (IdPempu) 
+        REFERENCES Pempu(IdPusat) ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (IdPemda)
+        REFERENCES Pemda(IdPemda) ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (IdPenerima)
+        REFERENCES Masyarakat(IdMasya) ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (IdBansos)
+        REFERENCES TipeBansos(IdBansos) ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT CekIdBank CHECK(
+        IdBank IN(
+            'BK[0-9][0-9][0-9][0-9]'
         )
     )
-)
---- 8
---- Jenis Barang
----
-CREATE TABLE JenisBarang (
-    IdBarang CHAR(6) NOT NULL,
-    JenisBarang VARCHAR(MAX),
-    Quantity VARCHAR(MAX),
-    PRIMARY KEY(IdBarang),
-    CONSTRAINT Cekid CHECK (
-        IdBarang IN (
-            'JB[0-9][0-9][0-9][0-9]'
+); 
+
+CREATE TABLE Ekspedisi(
+    IdEkspedisi CHAR(6) NOT NULL,
+    IdPempu CHAR(6) NOT NULL,
+    IdPemda CHAR(6) NOT NULL,
+    IdKurir CHAR(6) NOT NULL,
+    IdPenerima CHAR(6) NOT NULL,
+    IdBansos CHAR(6) NOT NULL,
+    Harga INT NOT NULL,
+    JenisBarang VARCHAR(255),
+    TanggalPengiriman DATE,
+    IdDestinasi VARCHAR(255) NOT NULL,
+    PRIMARY KEY (IdEkspedisi),
+    FOREIGN KEY (IdPempu)
+        REFERENCES Pempu(IdPusat) ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (IdPemda)
+        REFERENCES Pemda(IdPemda) ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (IdPenerima)
+        REFERENCES Masyarakat(IdMasya) ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (IdBansos)
+        REFERENCES TipeBansos(IdBansos) ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT CekIdEkspedisi CHECK (
+        IdEkspedisi IN (
+            'EX[0-9][0-9][0-9][0-9]'
         )
     )
-)
+);
+
+
+
+
+
+
