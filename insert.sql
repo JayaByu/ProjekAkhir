@@ -98,13 +98,13 @@ INSERT INTO Kurir(
     'Supratno',
     'Jalan Cheras Mewah 10, Taman Cheras Mewah',
     'Laki',
-    '20th'
+    20
 ),(
     'KU002',
     'Supratman',
     'Jalan Sulam, Taman Sentosa.',
     'Laki',
-    '19th'
+    19
 )
 
 INSERT INTO Bank(

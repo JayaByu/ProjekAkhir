@@ -1,7 +1,3 @@
-CREATE DATABASE Bansos;
-USE Bansos;
-DROP DATABASE test;
-
 CREATE TABLE Pempu(
     IdPusat CHAR(6) NOT NULL,
     NamaPempus VARCHAR(255) NOT NULL,
@@ -91,7 +87,7 @@ CREATE TABLE Kurir(
     Nama VARCHAR(255),
     Alamat VARCHAR(255),
     Gender VARCHAR(255),
-    Usia VARCHAR(100),
+    Usia INT,
     PRIMARY KEY (IdKurir),
     CONSTRAINT Chk_Kurir CHECK (
         IdKurir LIKE(
@@ -113,10 +109,6 @@ CREATE TABLE Bank(
     NamaBank VARCHAR(255),
     Transaksi DATE,
     PRIMARY KEY (IdBank),
-    FOREIGN KEY (IdPempu) 
-        REFERENCES Pempu(IdPusat) ON DELETE CASCADE ON UPDATE CASCADE,
-    FOREIGN KEY (IdPemda)
-        REFERENCES Pemda(IdPemda) ON DELETE CASCADE ON UPDATE CASCADE,
     FOREIGN KEY (IdPenerima)
         REFERENCES Masyarakat(IdMasya) ON DELETE CASCADE ON UPDATE CASCADE,
     FOREIGN KEY (IdBansos)
@@ -153,9 +145,7 @@ CREATE TABLE Ekspedisi(
         )
     )
 );
-
-
-
+    
 
 
 
