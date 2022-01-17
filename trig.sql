@@ -95,24 +95,11 @@ INSERT INTO Kurir(
 
 DELETE FROM Kurir WHERE IdKurir = 'KU006'
 
-SELECT * FROM Kurir
 
-INSERT INTO Kurir(
-    IdKurir,
-    Nama,
-    Alamat,
-    Gender,
-    Usia
-) VALUES (
-    'KU001',
-    'Supratno',
-    'Jalan Cheras Mewah 10, Taman Cheras Mewah',
-    'Laki',
-    20
-),(
-    'KU002',
-    'Supratman',
-    'Jalan Sulam, Taman Sentosa.',
-    'Laki',
-    19
-)
+SELECT      Bank.IdPenerima,
+            Ekspedisi.IdPenerima,
+            Masyarakat.Nama
+FROM        Bank,Ekspedisi,Masyarakat
+
+
+CREATE DATABASE revisi

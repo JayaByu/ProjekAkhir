@@ -1,3 +1,5 @@
+USE revisi;
+
 CREATE TABLE Pempu(
     IdPusat CHAR(6) NOT NULL,
     NamaPempus VARCHAR(255) NOT NULL,
